@@ -5,10 +5,9 @@
 //  Created by Lu Ai on 2024/9/20.
 //
 
-
 import Foundation
 
-protocol Steppable {
+public protocol Steppable {
     static var origin: Self { get }
 
     func forward() -> Self
@@ -16,29 +15,29 @@ protocol Steppable {
 }
 
 extension Int: Steppable {
-    static var origin: Int {
+    public static var origin: Int {
         return 0
     }
-    
-    func forward() -> Int {
+
+    public func forward() -> Int {
         return self + 1
     }
 
-    func backward() -> Int {
+    public func backward() -> Int {
         return self - 1
     }
 }
 
 extension Date: Steppable {
-    static var origin: Date {
+    public static var origin: Date {
         return .now
     }
-    
-    func forward() -> Date {
+
+    public func forward() -> Date {
         return Calendar.current.date(byAdding: .day, value: 1, to: self) ?? self
     }
 
-    func backward() -> Date {
+    public func backward() -> Date {
         return Calendar.current.date(byAdding: .day, value: -1, to: self) ?? self
     }
 }
