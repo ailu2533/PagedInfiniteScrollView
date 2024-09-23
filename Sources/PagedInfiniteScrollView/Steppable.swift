@@ -10,8 +10,8 @@ import Foundation
 public protocol Steppable {
     static var origin: Self { get }
 
-    func forward() -> Self
-    func backward() -> Self
+    func forward() -> Self?
+    func backward() -> Self?
 }
 
 extension Int: Steppable {
@@ -19,11 +19,11 @@ extension Int: Steppable {
         return 0
     }
 
-    public func forward() -> Int {
+    public func forward() -> Int? {
         return self + 1
     }
 
-    public func backward() -> Int {
+    public func backward() -> Int? {
         return self - 1
     }
 }
@@ -33,11 +33,11 @@ extension Date: Steppable {
         return .now
     }
 
-    public func forward() -> Date {
+    public func forward() -> Date? {
         return Calendar.current.date(byAdding: .day, value: 1, to: self) ?? self
     }
 
-    public func backward() -> Date {
+    public func backward() -> Date? {
         return Calendar.current.date(byAdding: .day, value: -1, to: self) ?? self
     }
 }

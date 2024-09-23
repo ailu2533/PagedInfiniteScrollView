@@ -51,7 +51,9 @@ public struct PagedInfiniteScrollView<S: Steppable & Comparable, Content: View>:
                 return nil
             }
 
-            let previousIndex = currentIndex.backward()
+            guard let previousIndex = currentIndex.backward() else {
+                return nil
+            }
 
             return UIHostingController(rootView: IdentifiableContent(index: previousIndex, content: { parent.content(previousIndex) }))
         }
@@ -61,7 +63,9 @@ public struct PagedInfiniteScrollView<S: Steppable & Comparable, Content: View>:
                 return nil
             }
 
-            let nextIndex = currentIndex.forward()
+            guard let nextIndex = currentIndex.forward() else {
+                return nil
+            }
 
             return UIHostingController(rootView: IdentifiableContent(index: nextIndex, content: { parent.content(nextIndex) }))
         }
