@@ -28,16 +28,16 @@ extension Int: Steppable {
     }
 }
 
-extension Date: Steppable {
-    public static var origin: Date {
-        return .now
-    }
-
-    public func forward() -> Date? {
-        return Calendar.current.date(byAdding: .day, value: 1, to: self) ?? self
-    }
-
-    public func backward() -> Date? {
-        return Calendar.current.date(byAdding: .day, value: -1, to: self) ?? self
-    }
-}
+//extension Date: Steppable {
+//    public static var origin: Date {
+//        return .now
+//    }
+//
+//    public func forward() -> Date? {
+//        return Calendar.current.date(byAdding: .day, value: 1, to: self) ?? self
+//    }
+//
+//    public func backward() -> Date? {
+//        return Calendar.current.date(byAdding: .day, value: -1, to: self) ?? self
+//    }
+//}

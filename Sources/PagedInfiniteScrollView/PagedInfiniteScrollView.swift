@@ -2,8 +2,21 @@
 import SwiftUI
 import UIKit
 
+public class CustomPageViewController: UIPageViewController {
+    override public func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+//        navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+}
+
 public struct PagedInfiniteScrollView<S: Steppable & Comparable, Content: View>: UIViewControllerRepresentable {
-    public typealias UIViewControllerType = UIPageViewController
+    public typealias UIViewControllerType = CustomPageViewController
 
     let content: (S) -> Content
     @Binding var currentPage: S
@@ -17,24 +30,29 @@ public struct PagedInfiniteScrollView<S: Steppable & Comparable, Content: View>:
         Coordinator(self)
     }
 
-    public func makeUIViewController(context: Context) -> UIPageViewController {
-        let pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+    public func makeUIViewController(context: Context) -> CustomPageViewController {
+        let pageViewController = CustomPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
         pageViewController.dataSource = context.coordinator
         pageViewController.delegate = context.coordinator
 
         let initialViewController = UIHostingController(rootView: IdentifiableContent(index: currentPage, content: { content(currentPage) }))
+
+        initialViewController.view.backgroundColor = .clear
+
         pageViewController.setViewControllers([initialViewController], direction: .forward, animated: false, completion: nil)
 
         return pageViewController
     }
 
-    public func updateUIViewController(_ uiViewController: UIPageViewController, context: Context) {
+    public func updateUIViewController(_ uiViewController: CustomPageViewController, context: Context) {
         let currentViewController = uiViewController.viewControllers?.first as? UIHostingController<IdentifiableContent<Content, S>>
         let currentIndex = currentViewController?.rootView.index ?? .origin
 
         if currentPage != currentIndex {
             let direction: UIPageViewController.NavigationDirection = currentPage > currentIndex ? .forward : .reverse
             let newViewController = UIHostingController(rootView: IdentifiableContent(index: currentPage, content: { content(currentPage) }))
+            newViewController.view.backgroundColor = .clear
+
             uiViewController.setViewControllers([newViewController], direction: direction, animated: true, completion: nil)
         }
     }
@@ -55,7 +73,10 @@ public struct PagedInfiniteScrollView<S: Steppable & Comparable, Content: View>:
                 return nil
             }
 
-            return UIHostingController(rootView: IdentifiableContent(index: previousIndex, content: { parent.content(previousIndex) }))
+            let newViewController = UIHostingController(rootView: IdentifiableContent(index: previousIndex, content: { parent.content(previousIndex) }))
+            newViewController.view.backgroundColor = .clear
+
+            return newViewController
         }
 
         public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
@@ -67,7 +88,10 @@ public struct PagedInfiniteScrollView<S: Steppable & Comparable, Content: View>:
                 return nil
             }
 
-            return UIHostingController(rootView: IdentifiableContent(index: nextIndex, content: { parent.content(nextIndex) }))
+            let newViewController = UIHostingController(rootView: IdentifiableContent(index: nextIndex, content: { parent.content(nextIndex) }))
+            newViewController.view.backgroundColor = .clear
+
+            return newViewController
         }
 
         public func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
