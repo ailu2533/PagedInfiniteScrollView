@@ -4,7 +4,7 @@ import UIKit
 public class CustomPageViewController: UIPageViewController {
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        navigationController?.setNavigationBarHidden(false, animated: animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
     }
 
     override public func viewDidAppear(_ animated: Bool) {
